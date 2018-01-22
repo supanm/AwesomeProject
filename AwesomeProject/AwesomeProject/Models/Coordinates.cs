@@ -4,20 +4,20 @@ using System.Text;
 
 namespace AwesomeProject.Models
 {
-    // Struct to represent the x and y coordinates of a given Being.
+    // Struct that represents an immutable pair of x/y coordinates.
     public struct Coordinates
     {
-        public int XPos { get; private set; }
-        public int YPos { get; private set; }
+        public int XPos { get; }
+        public int YPos { get; }
 
-        // Updates the x and y coordinates simultaneously.
-        public void MoveTo(int x, int y)
+        // Constructor for an immutable pair of x/y coordinates.
+        public Coordinates(int x, int y)
         {
-            XPos = x;
-            YPos = y;
+            this.XPos = x;
+            this.YPos = y;
         }
 
-        // Returns the Manhattan distance between two corodinates.
+        // Returns the Manhattan distance between this and another corodinate.
         public int DistanceTo(Coordinates other)
         {
             return Math.Abs(XPos - other.XPos) + Math.Abs(YPos - other.YPos);

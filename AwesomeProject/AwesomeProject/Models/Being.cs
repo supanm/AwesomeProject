@@ -6,7 +6,20 @@ namespace AwesomeProject.Models
     public class Being : IComparable<Being>
     {
 
-        // This Being's current set of stats.
+        // Internal class to represent each Being's set of stats. 
+        public class Attributes
+        {
+            public int    Attack     { get; set; }
+            public string Class      { get; set; }
+            public int    Defense    { get; set; }
+            public int    HealthCurr { get; set; }
+            public int    HealthMax  { get; set; }
+            public int    Level      { get; set; }
+            public int    Speed      { get; set; }
+            public int    XP         { get; set; }
+        }
+
+        // This Being's current instance of stats.
         public Attributes Stats { get; private set; }
 
         // This Being's current position.
@@ -21,7 +34,14 @@ namespace AwesomeProject.Models
         }
 
 
-        // Models an attack on another Being. Returns amount of damage done (if any).
+        // Moves this Being to the specified coordinate pair.
+        public void MoveTo(Coordinates position)
+        {
+            this.Position = position;
+        }
+
+
+        // Attacks another Being and returns amount of damage done (if any).
         public int DoAttack(Being other)
         {
             // Roll dice for "hit or miss."
@@ -37,116 +57,59 @@ namespace AwesomeProject.Models
             throw new NotImplementedException();
         }
 
+
         // Returns true if this Being is still alive.
-        public bool IsLiving()
+        public bool IsAlive()
         {
             return (Stats.HealthCurr > 0);
         }
 
+
         // Implements the IComparable interface to determine the sort order
-        // based on each being's initiative level.
+        // of Beings based on their level of initiative. This way, we can build
+        // an "attack queue" and sort it based on descending initiative.
         public int CompareTo(Being other)
         {
-            // If only one being is living, that one wins.
+            // If one character is dead, sort based on "is alive."
+            if (this.IsAlive() != other.IsAlive())
+            {
+                return this.IsAlive().CompareTo(other.IsAlive());
+            }
 
-            // If either Being has greater speed, that one wins.
+            // Else, sort based on greater speed.
+            if (this.Stats.Speed != other.Stats.Speed)
+            {
+                return this.Stats.Speed.CompareTo(other.Stats.Speed);
+            }
 
-            // Otherwise, sort based on:
-            // Level, xp, "character vs. monster," alpha, then numeric.
+            // Else, sort based on higher level.
+            if (this.Stats.Level != other.Stats.Level)
+            {
+                return this.Stats.Level.CompareTo(other.Stats.Level);
+            }
 
+            // Else, sort based on higher XP.
+            if (this.Stats.XP != other.Stats.XP)
+            {
+                return this.Stats.XP.CompareTo(other.Stats.XP);
+            }
+
+            // Else, sort based on characters over monsters.
+            if (this.GetType() != other.GetType())
+            {
+                return (this.GetType() == typeof(Character)) ? 1 : -1;
+            }
+            
+            // Else, sort based on alpha of Being type (i.e., the name of each class).
+            if (this.GetType() == typeof(Character) && other.GetType() == typeof(Character))
+            {
+                return this.Stats.Class.CompareTo(other.Stats.Class);
+            }
+
+            // TODO: Else, sort based on numeric order. 
             throw new NotImplementedException();
         }
         
-        // Attempts to move to the specified location; returns "true" on success.
-        public bool MoveTo(int x, int y)
-        {
-            throw new NotImplementedException();
-        }
     }
 
-
-    // ------------------------------------------------------------------------
-
-    // Class for type Character (derived from Being).
-    public class Character : Being
-    {
-        // Character's personal name.
-        public string Name { get; private set; }
-
-        // Backing array of inventory slots, one for each enumerated location. 
-        // E.g., Items[3] represents "item in LeftHand."
-        public Item[] Inventory { get; private set; }
-
-
-        // Default constructor.
-        public Character() : base()
-        {
-            // Get the number of slots as a sanity check. (Should be seven.)
-            int numLocations = Enum.GetNames(typeof(Locations)).Length;
-
-            // Create the inventory backing array with one item per slot.
-            Inventory = new Item[numLocations];
-        }
-
-
-        // Assigns an item to the character's specified inventory slot.
-        public Item GetItem(Item item, Locations slot)
-        {
-            // Validate that the item can "fit" in the slot (e.g., not "sword -> feet").
-
-            // Test whether the specified slot is currently holding an item. 
-            // If so, pick the "best" item to wear and drop the other item.
-            // If not, just put the item in the inventory slot.
-
-            // Update the character's stats to add any buffs from the new item.
-
-            // If we're dropping an item, return that item to caller, else return null.
-
-            throw new NotImplementedException();
-        }
-
-
-        // Removes a character's inventory item and returns that item to the caller.
-        public Item DropItem(Item item)
-        {
-            // Validate that the specified item is contained in the inventory.
-
-            // Update the character's stats to remove any buff from this item.
-
-            // Remove the specified item from the inventory and return it to caller.
-
-            throw new NotImplementedException();
-        }
-
-
-        // Adds experience to the character and levels up if appropriate.
-        public void AddExperience(int xp)
-        {
-            // Increment the amount of experience by the specified amount.
-
-            // Level up character if appropriate.
-
-            throw new NotImplementedException();
-        }
-
-    }
-
-
-    // ------------------------------------------------------------------------
-
-    public class Monster
-    {
-        // A list of each item held by this monster.
-        public List<Item> Items { get; }
-
-        // The unique item drop for this monster (if any).
-        public Item UniqueDrop { get; }
-
-        // Default constructor
-        public Monster() : base()
-        {
-            Items = new List<Item>();
-            UniqueDrop = null;
-        }
-    }
 }
