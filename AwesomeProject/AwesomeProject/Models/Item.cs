@@ -6,7 +6,7 @@ namespace AwesomeProject.Models
     public class Item
     {
         // Enumeration to track each type of buff.
-        public enum Buff { Attack, Defense, Damage };
+        public enum Buff { Health, Attack, Defense, Speed };
 
         // This item's name, location and buff.
         public string    Name      { get; set; }
