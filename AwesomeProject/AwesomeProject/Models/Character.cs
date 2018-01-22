@@ -101,5 +101,15 @@ namespace AwesomeProject.Models
             throw new NotImplementedException();
         }
 
+
+        // Compares current XP to last XP and levels up if appropriate.
+        public void LevelUp(int oldXP)
+        {
+            // Check if oldXP corresponds to a lower level than current XP.
+
+            // If so, update the level and increment the relevant attributes.
+            throw new NotImplementedException();
+        }
+
     }
 }
