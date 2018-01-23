@@ -29,11 +29,11 @@ namespace AwesomeProject.Models
             this.XP += xp;
 
             // Level up character if appropriate based on old/new experience.
-            throw new NotImplementedException();
+            LevelUp(oldXp);
         }
 
         // Compares current XP to last XP and levels up if appropriate.
-        public void LevelUp(int oldXP)
+        public void LevelUp(int oldXp)
         {
             // Check if oldXP corresponds to a lower level than current XP.
 
