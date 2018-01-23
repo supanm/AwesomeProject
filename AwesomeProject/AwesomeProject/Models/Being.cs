@@ -7,7 +7,7 @@ namespace AwesomeProject.Models
     // sort beings based on their initiative.
     public abstract class Being : IComparable<Being>
     {
-        // This being's statistics.
+        // This being's associated statistics.
         public Statistics Stats { get; set; }
 
         // This Being's current position.
