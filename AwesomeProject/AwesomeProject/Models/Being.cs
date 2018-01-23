@@ -27,9 +27,8 @@ namespace AwesomeProject.Models
 
         // Implements the IComparable interface to determine the sort order
         // of Beings based on their level of initiative. This allows us to sort
-        // 
-        // and sort an "attack queue" by initiative. (Alternatively, this code 
-        // could be implemented as an IComparer in the Controller.)
+        // an "attack queue" by initiative. (Alternatively, this code could be 
+        // implemented as an IComparer in the Controller.)
         public int CompareTo(Being other)
         {
             // If one character is dead, sort based on "is alive."
